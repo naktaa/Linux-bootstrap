@@ -10,11 +10,15 @@ OrbStack Linux 머신에서는 Mac 파일을 `/mnt/mac`에서 볼 수 있다. �
 
 ```bash
 cd "/mnt/mac/Users/$USER/Linux-bootstrap"
-bash install.sh
-exec bash
+./install.sh && exec bash
 ```
 
-레포가 다른 위치에 있다면 그 디렉터리에서 `bash install.sh`를 실행한다.
+레포가 다른 위치에 있다면 그 디렉터리에서 `./install.sh && exec bash`를 실행한다.
+`install.sh`는 별도 프로세스에서 실행되므로 현재 터미널의 Bash 설정을 직접
+바꿀 수 없다. `&& exec bash`는 설치에 성공한 뒤 현재 셸을 새 Bash로 교체해
+`~/.bashrc`의 별칭을 즉시 반영한다. 새 터미널을 열 예정이라면 생략해도 된다.
+공유 폴더에서 실행 권한 문제가 나면 `bash install.sh && exec bash`를 사용한다.
+
 Git이 없어 레포를 clone할 수 없는 독립 Ubuntu 환경에서는 레포 파일을 먼저
 복사하거나, Git만 설치한 뒤 clone한다.
 
