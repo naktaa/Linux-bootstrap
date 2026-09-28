@@ -5,27 +5,34 @@ Ubuntu 환경에서 기본 개발 패키지와 Vim, Bash, Git 사용자 설정�
 
 ## 새 Ubuntu에서 처음 실행
 
-OrbStack Linux 머신에서는 Mac 파일을 `/mnt/mac`에서 볼 수 있다. 기본 사용자의
-이름이 Mac 계정과 같다면 Ubuntu 터미널에서 다음 순서로 실행한다.
+OrbStack Ubuntu 머신에 직접 접속해 레포를 머신 안에 clone하려면, 처음에는 Git이
+없으므로 Git 설치만 먼저 실행한다.
+
+```bash
+sudo apt-get update
+sudo apt-get install -y git
+./install.sh && exec bash
+```
+
+`install.sh`가 나머지 패키지를 설치하고 Vim·Bash·Git 사용자 설정을 적용한다.
+Git도 설치 목록에 있지만, 위 순서에서는 이미 설치된 것으로 확인하고 건너뛴다.
+
+Git을 미리 설치하고 싶지 않다면 OrbStack에서 Mac 파일이 보이는 `/mnt/mac` 경로의
+레포를 직접 실행할 수도 있다. 이 경우 Ubuntu에 Git이 없어도 `install.sh`가
+Git을 설치한다.
 
 ```bash
 cd "/mnt/mac/Users/$USER/Linux-bootstrap"
 ./install.sh && exec bash
 ```
 
-레포가 다른 위치에 있다면 그 디렉터리에서 `./install.sh && exec bash`를 실행한다.
 `install.sh`는 별도 프로세스에서 실행되므로 현재 터미널의 Bash 설정을 직접
 바꿀 수 없다. `&& exec bash`는 설치에 성공한 뒤 현재 셸을 새 Bash로 교체해
 `~/.bashrc`의 별칭을 즉시 반영한다. 새 터미널을 열 예정이라면 생략해도 된다.
 공유 폴더에서 실행 권한 문제가 나면 `bash install.sh && exec bash`를 사용한다.
 
-Git이 없어 레포를 clone할 수 없는 독립 Ubuntu 환경에서는 레포 파일을 먼저
-복사하거나, Git만 설치한 뒤 clone한다.
-
-`install.sh`는 설치되지 않은 패키지가 있을 때 `apt-get update`와 설치를 실행하고,
-이어서 `setup.sh`로 사용자 설정을 적용한다. 패키지 설치에만 `sudo`를 사용하므로
-**`sudo bash install.sh`로 실행하지 않는다.** 재실행 시 이미 설치된 패키지는
-건너뛰고 Vim·Bash 연결 블록도 중복 추가하지 않는다.
+패키지 설치에만 `sudo`를 사용하므로 **`sudo ./install.sh`로 실행하지 않는다.**
+재실행 시 이미 설치된 패키지와 Vim·Bash 연결 블록은 건너뛴다.
 
 설치 패키지: `git`, `curl`, `wget`, `unzip`, `build-essential`, `procps`,
 `psmisc`, `htop`, `acl`, `tree`, `vim`, `openssh-client`.
