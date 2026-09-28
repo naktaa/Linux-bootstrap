@@ -1,0 +1,3 @@
+# linux-bootstrap이 관리하는 Bash 별칭
+alias c='clear'
+alias py='python3'
