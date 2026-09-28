@@ -1,9 +1,32 @@
 # Linux-bootstrap
 
-Linux 환경에서 Vim 설정, Bash 별칭, Git 사용자 이름과 이메일을 적용한다.
+Ubuntu 환경에서 기본 개발 패키지와 Vim, Bash, Git 사용자 설정을 적용한다.
 기존 `~/.vimrc`와 `~/.bashrc` 내용은 보존하고 관리 설정을 불러오는 블록만 추가한다.
 
-## 실행
+## 새 Ubuntu에서 처음 실행
+
+OrbStack Linux 머신에서는 Mac 파일을 `/mnt/mac`에서 볼 수 있다. 기본 사용자의
+이름이 Mac 계정과 같다면 Ubuntu 터미널에서 다음 순서로 실행한다.
+
+```bash
+cd "/mnt/mac/Users/$USER/Linux-bootstrap"
+bash install.sh
+exec bash
+```
+
+레포가 다른 위치에 있다면 그 디렉터리에서 `bash install.sh`를 실행한다.
+Git이 없어 레포를 clone할 수 없는 독립 Ubuntu 환경에서는 레포 파일을 먼저
+복사하거나, Git만 설치한 뒤 clone한다.
+
+`install.sh`는 설치되지 않은 패키지가 있을 때 `apt-get update`와 설치를 실행하고,
+이어서 `setup.sh`로 사용자 설정을 적용한다. 패키지 설치에만 `sudo`를 사용하므로
+**`sudo bash install.sh`로 실행하지 않는다.** 재실행 시 이미 설치된 패키지는
+건너뛰고 Vim·Bash 연결 블록도 중복 추가하지 않는다.
+
+설치 패키지: `git`, `curl`, `wget`, `unzip`, `build-essential`, `procps`,
+`psmisc`, `htop`, `acl`, `tree`, `vim`, `openssh-client`.
+
+## 사용자 설정만 다시 적용
 
 ```bash
 ./setup.sh --dry-run
@@ -11,8 +34,7 @@ Linux 환경에서 Vim 설정, Bash 별칭, Git 사용자 이름과 이메일을
 ```
 
 `--dry-run`은 변경 예정 항목만 출력한다. 실제 실행 후 새 Bash 셸을 열면 별칭이 반영된다.
-재실행해도 연결 블록은 중복 추가되지 않는다. 기존 파일을 변경할 때는
-`~/.linux-bootstrap-backups/` 아래에 백업을 만든다.
+기존 파일을 변경할 때는 `~/.linux-bootstrap-backups/` 아래에 백업을 만든다.
 
 ## 적용 항목
 
