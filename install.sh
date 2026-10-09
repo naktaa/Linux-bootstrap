@@ -2,14 +2,16 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+NO_SHELL=0
 
 usage() {
-  printf '사용법: bash install.sh [--help]\n'
+  printf '사용법: bash install.sh [--no-shell] [--help]\n'
 }
 
 while (($#)); do
   case "$1" in
     --help|-h) usage; exit 0 ;;
+    --no-shell) NO_SHELL=1 ;;
     *) printf '[ERROR] 알 수 없는 옵션: %s\n' "$1" >&2; usage >&2; exit 2 ;;
   esac
   shift
@@ -56,4 +58,9 @@ else
 fi
 
 printf '\n=== 사용자 설정 적용 ===\n'
-bash "$SCRIPT_DIR/setup.sh"
+bash "$SCRIPT_DIR/setup.sh" --no-shell
+
+if (( ! NO_SHELL )) && [[ -t 0 && -t 1 ]]; then
+  printf '\n설정을 반영한 Bash 셸을 시작합니다. exit로 이전 셸로 돌아갑니다.\n'
+  exec bash -i
+fi

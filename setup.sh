@@ -3,14 +3,16 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 DRY_RUN=0
+NO_SHELL=0
 
 usage() {
-  printf '사용법: ./setup.sh [--dry-run] [--help]\n'
+  printf '사용법: ./setup.sh [--dry-run] [--no-shell] [--help]\n'
 }
 
 while (($#)); do
   case "$1" in
     --dry-run) DRY_RUN=1 ;;
+    --no-shell) NO_SHELL=1 ;;
     --help|-h) usage; exit 0 ;;
     *) printf '[ERROR] 알 수 없는 옵션: %s\n' "$1" >&2; usage >&2; exit 2 ;;
   esac
@@ -118,5 +120,9 @@ configure_git user.email "$GIT_USER_EMAIL"
 if ((DRY_RUN)); then
   printf '\n[DRY RUN] 실제 파일과 Git 설정은 변경하지 않았습니다.\n'
 else
-  printf '\n완료. Bash 별칭을 현재 셸에 반영하려면 새 Bash 셸을 여세요.\n'
+  printf '\n완료. 사용자 설정을 적용했습니다.\n'
+  if (( ! NO_SHELL )) && [[ -t 0 && -t 1 ]]; then
+    printf '\n설정을 반영한 Bash 셸을 시작합니다. exit로 이전 셸로 돌아갑니다.\n'
+    exec bash -i
+  fi
 fi

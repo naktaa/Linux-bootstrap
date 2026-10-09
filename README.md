@@ -11,7 +11,7 @@ OrbStack Ubuntu 머신에 직접 접속해 레포를 머신 안에 clone하려�
 ```bash
 sudo apt-get update
 sudo apt-get install -y git
-./install.sh && exec bash
+./install.sh
 ```
 
 `install.sh`가 나머지 패키지를 설치하고 Vim·Bash·Git 사용자 설정을 적용한다.
@@ -23,13 +23,15 @@ Git을 설치한다.
 
 ```bash
 cd "/mnt/mac/Users/$USER/Linux-bootstrap"
-./install.sh && exec bash
+./install.sh
 ```
 
-`install.sh`는 별도 프로세스에서 실행되므로 현재 터미널의 Bash 설정을 직접
-바꿀 수 없다. `&& exec bash`는 설치에 성공한 뒤 현재 셸을 새 Bash로 교체해
-`~/.bashrc`의 별칭을 즉시 반영한다. 새 터미널을 열 예정이라면 생략해도 된다.
-공유 폴더에서 실행 권한 문제가 나면 `bash install.sh && exec bash`를 사용한다.
+터미널에서 실행하면 설치에 성공한 뒤 `~/.bashrc`를 읽는 새 Bash 셸을 자동으로
+시작하므로 별칭을 바로 사용할 수 있다. 별도의 `exec bash` 명령은 필요 없다.
+`exit`로 자동 시작된 셸을 종료하면 실행 전 셸로 돌아간다.
+공유 폴더에서 실행 권한 문제가 나면 `bash install.sh`를 사용한다.
+자동으로 셸을 시작하지 않으려면 `./install.sh --no-shell`을 사용한다.
+입력이나 출력이 터미널이 아닌 실행에서는 새 셸을 시작하지 않는다.
 
 패키지 설치에만 `sudo`를 사용하므로 **`sudo ./install.sh`로 실행하지 않는다.**
 재실행 시 이미 설치된 패키지와 Vim·Bash 연결 블록은 건너뛴다.
@@ -44,7 +46,8 @@ cd "/mnt/mac/Users/$USER/Linux-bootstrap"
 ./setup.sh
 ```
 
-`--dry-run`은 변경 예정 항목만 출력한다. 실제 실행 후 새 Bash 셸을 열면 별칭이 반영된다.
+`--dry-run`은 변경 예정 항목만 출력한다. 실제 실행은 터미널에서 새 Bash 셸을
+자동으로 시작해 별칭을 바로 반영한다. `./setup.sh --no-shell`로 자동 시작을 끌 수 있다.
 기존 파일을 변경할 때는 `~/.linux-bootstrap-backups/` 아래에 백업을 만든다.
 
 ## 적용 항목
